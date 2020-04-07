@@ -1,0 +1,6 @@
+#customBookmarks = {
+
+	width: 300px !important;
+	float: right !important;	
+	
+}

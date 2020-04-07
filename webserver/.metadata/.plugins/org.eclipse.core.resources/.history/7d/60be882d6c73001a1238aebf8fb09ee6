@@ -1,0 +1,15 @@
+#customTopBookMark{
+
+	/* width: 300px !important;
+	float: right !important; */	
+	color : black;
+	
+	float : right !important;
+	
+	width : 100 %;
+
+	
+	
+	
+	
+}

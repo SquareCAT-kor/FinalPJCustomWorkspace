@@ -1,0 +1,9 @@
+#good{
+
+	/* width: 300px !important;
+	float: right !important; */	
+	color : black;
+	/* width: 500px; */
+	margin-left:auto; margin-right:auto;
+	
+}

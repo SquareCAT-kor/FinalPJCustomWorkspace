@@ -1,0 +1,11 @@
+#good{
+
+	/* width: 300px !important;
+	float: right !important; */	
+	color : black;
+	position : relative;
+	width: 500px;
+	margin-left:auto;
+	margin-right:auto;
+	
+}

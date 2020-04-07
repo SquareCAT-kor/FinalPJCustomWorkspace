@@ -1,0 +1,12 @@
+#good{
+
+	/* width: 300px !important;
+	float: right !important; */	
+	color : black;
+	position : relative;
+	float : right !important;
+	width: 400px;
+	margin-right: 200px;
+	
+	
+}
