@@ -18,5 +18,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/springJstlJsonOjdbc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Rjava"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
