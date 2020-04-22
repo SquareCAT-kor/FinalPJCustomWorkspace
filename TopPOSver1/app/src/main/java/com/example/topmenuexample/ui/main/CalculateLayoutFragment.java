@@ -17,19 +17,20 @@ import com.example.topmenuexample.MainActivity;
 import com.example.topmenuexample.Order;
 import com.example.topmenuexample.R;
 import com.example.topmenuexample.Sales;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
 /*
-*  정산 기능이 있는 CalculateFragment.
-* */
+ *  정산 기능이 있는 CalculateFragment.
+ *  URLConnection 추가
+ * */
 
 public class CalculateLayoutFragment extends Fragment {
 
@@ -42,7 +43,8 @@ public class CalculateLayoutFragment extends Fragment {
     private Sales sales = new Sales();
     private ArrayList<Sales> salesList = new ArrayList<Sales>();
     RecyclerView list_calculateview;
-    Gson gson = new Gson();
+    private JSONObject jo;
+    private JSONArray ja;
 
     TextView cctxt_totalcalculate, cctxt_chainname, cctxt_totalordercount, cctxt_clerkname;
     TextView cctxt_starttime, cctxt_endtime;
@@ -137,14 +139,14 @@ public class CalculateLayoutFragment extends Fragment {
 
                 String endTime = ((MainActivity) getActivity()).getCurrentTime();
                 cctxt_endtime.setText(endTime);
-                String sellDay = ((MainActivity)getActivity()).getDay();
+                String sellDay = ((MainActivity) getActivity()).getDay();
                 sales.setSellDate(sellDay);
                 sales.setAdmin(admin);
                 sales.setSellCost(finalTotalsum);
                 sales.setSellCount(totalcount);
 
-                ((MainActivity)getActivity()).tempSales = sales;
-                ((MainActivity)getActivity()).tempSalesList.add(sales);
+                ((MainActivity) getActivity()).tempSales = sales;
+                ((MainActivity) getActivity()).tempSalesList.add(sales);
                 ((MainActivity) getActivity()).setPageNum(3);
                 ((MainActivity) getActivity()).viewPager.setCurrentItem(3);
 
@@ -163,57 +165,63 @@ public class CalculateLayoutFragment extends Fragment {
         });
 
 
-
-
     }
 
-    public void sendJsonData(Sales sales){
+    public void sendJsonData(Sales sales) {
         sales = this.sales;
-        JsonObject jo = new JsonObject();
-        jo.addProperty("saleDate",sales.getSellDate());
-        jo.addProperty("saleCount",sales.getSellCount());
-        jo.addProperty("saleCost",sales.getSellCost());
-        jo.addProperty("saleAdmin",sales.getAdmin());
-        JSONArray ja = new JSONArray();
-        ja.put(jo);
-        sendToHttpTask stht = new sendToHttpTask("sales",ja);
-        stht.execute();
-
-
-
+        jo = new JSONObject();
+        try {
+            jo.put("saleDate", sales.getSellDate());
+            jo.put("saleCount", sales.getSellCount());
+            jo.put("saleCost", sales.getSellCost());
+            jo.put("saleAdmin", sales.getAdmin());
+            sendToHttpTask task = new sendToHttpTask(jo);
+            task.execute();
+        } catch (Exception e) {
+            Log.d("---", "error occured in sendData");
+            e.printStackTrace();
+        }
 
 
     }
+
     class sendToHttpTask extends AsyncTask<Void, Void, String> {
 
-        String url;
+        URL url;
+        JSONObject jo;
 
-        public sendToHttpTask(String key, JSONArray ja) {
-            url = "http://70.12.224.85/top/pos.top?";
-            url += "key=" + key + "&data=" + ja;
-
+        public sendToHttpTask(JSONObject jo) {
+            try {
+                url = new URL("http://70.12.224.85/top/pos.top");
+                this.jo = jo;
+            } catch (MalformedURLException e) {
+                Log.d("---", "Error occured in urlconnection");
+                e.printStackTrace();
+            }
         }
+
+
 
         @Override
         protected String doInBackground(Void... voids) {
             Log.d("---", "Background Processing");
-            return HttpHandler.getString(url);
+            return JSONHttpHandler.getString(url, jo);
+//            return null;
         }
 
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("---", "getFrom Server"+result.trim());
-
-            if (result.trim().equals("1")) {
-                Log.d("---","Data Inserted");
-            } else {
-
-
+            if (result != null && result != "") {
+                Log.d("---", "getFrom Server" + result.trim());
+                if (result.trim().equals("success")) {
+                    Log.d("---", "Data Inserted");
+                } else {
+                    Log.d("---", "no msg came from Server");
+                }
             }
 
         }
-
 
     }
 

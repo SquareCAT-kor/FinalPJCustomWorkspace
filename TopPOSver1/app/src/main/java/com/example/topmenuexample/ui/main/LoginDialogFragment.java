@@ -47,9 +47,9 @@ public class LoginDialogFragment extends DialogFragment implements View.OnClickL
             public void onClick(View v) {
                 String id = editText_ID.getText().toString();
                 String pwd = editText_PWD.getText().toString();
-                String startTime = ((MainActivity)getActivity()).getCurrentTime();
-                ((MainActivity)getActivity()).tempStartTime = startTime;
-                HttpTask task = new HttpTask(id,pwd);
+                String startTime = ((MainActivity) getActivity()).getCurrentTime();
+                ((MainActivity) getActivity()).tempStartTime = startTime;
+                HttpTask task = new HttpTask(id, pwd);
                 task.execute();
             }
         });
@@ -88,7 +88,7 @@ public class LoginDialogFragment extends DialogFragment implements View.OnClickL
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("---", "getFrom Server"+s.trim());
+            Log.d("---", "getFrom Server" + s.trim());
 
             if (s.trim().equals("1")) {
                 getDialog().dismiss();

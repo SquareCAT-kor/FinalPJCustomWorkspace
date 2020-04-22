@@ -1,5 +1,6 @@
 package com.example.topmenuexample.ui.main;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +16,13 @@ import com.example.topmenuexample.MainActivity;
 import com.example.topmenuexample.OrderDetail;
 import com.example.topmenuexample.R;
 import com.example.topmenuexample.Order;
+import com.example.topmenuexample.Sales;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 /*
 * 선택된 메뉴를 담고 결제시 주문내역을 보여주는 OrderFragment
@@ -29,6 +36,8 @@ public class OrderLayoutFragment extends Fragment {
     private Order order = new Order();
     private OrderListAdapter OrderListAdapter;
     TextView txt_orderCost, txt_orderCount, txt_orderDate, txt_orderNo;
+    private JSONObject jo;
+    private JSONArray ja;
 
 
     @Override
@@ -43,6 +52,11 @@ public class OrderLayoutFragment extends Fragment {
             odlist = ((MainActivity) getActivity()).tempOdlist;
             order = ((MainActivity) getActivity()).tempOrder;
             Log.d("---", "Get from menu" + "odlist: " + odlist + "Order" + order);
+
+            sendJsonOdlistData(odlist);
+
+            sendJsonOrderData(order);
+
 
             makeList(this.getView());
 
@@ -83,6 +97,81 @@ public class OrderLayoutFragment extends Fragment {
     }
 
 
+    public void sendJsonOrderData(Order order) {
+        order = this.order;
+        jo = new JSONObject();
+        try {
+            jo.put("orderDate", order.getOrderDate());
+            jo.put("orderCount", order.getTotalCount());
+            jo.put("orderCost", order.getTotalCost());
+            jo.put("orderNo", order.getOrderNo());
+           sendToHttpTask task = new sendToHttpTask(jo);
+            task.execute();
+        } catch (Exception e) {
+            Log.d("---", "error occured in sendOrderData");
+            e.printStackTrace();
+        }
+    }
+
+    public void sendJsonOdlistData(ArrayList<OrderDetail> odlist){
+        odlist = this.odlist;
+        JSONObject odjo = new JSONObject();
+        try{
+            for(int i = 0;i<odlist.size();i++){
+                odjo.put("menu"+i+1,odlist.get(i));
+            }
+            sendToHttpTask task = new sendToHttpTask(odjo);
+            task.execute();
+        }catch(Exception e){
+            Log.d("---", "error occured in sendOrderDetailListData");
+            e.printStackTrace();
+        }
+
+    }
+
+    class sendToHttpTask extends AsyncTask<Void, Void, String> {
+
+        URL url;
+        JSONObject jo;
+
+        public sendToHttpTask(JSONObject jo) {
+            try {
+                url = new URL("http://70.12.224.85/top/posorder.top");
+                this.jo = jo;
+            } catch (MalformedURLException e) {
+                Log.d("---", "Error occured in urlconnection");
+                e.printStackTrace();
+            }
+        }
+
+
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            Log.d("---", "Background Processing");
+            return JSONHttpHandler.getString(url, jo);
+//            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result != null && result != "") {
+                Log.d("---", "getFrom Server" + result.trim());
+                if (result.trim().equals("success")) {
+                    Log.d("---", "Data Inserted");
+                } else {
+                    Log.d("---", "no msg came from Server");
+                }
+            }
+
+        }
+
+    }
+
+
+
+
     public void makeList(View view) {
         Log.d("---", "makeList");
 
@@ -103,6 +192,7 @@ public class OrderLayoutFragment extends Fragment {
         txt_orderDate.setText(order.getOrderDate() + "");
         txt_orderCount.setText(order.getTotalCount() + "");
         txt_orderCost.setText(order.getTotalCost() + "");
+
 
     }
 

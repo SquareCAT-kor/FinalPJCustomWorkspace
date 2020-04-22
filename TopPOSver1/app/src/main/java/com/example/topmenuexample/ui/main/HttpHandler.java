@@ -21,7 +21,7 @@ public class HttpHandler {
             // 커낵션 타임이 초가 넘어가면 커낵션 취소 //
             hcon.setConnectTimeout(10000);
             // GET 메써드로 요청받기 //
-            hcon.setRequestMethod("GET");
+            hcon.setRequestMethod("POST");
             is = new BufferedInputStream(hcon.getInputStream());
             //convertStr 객체를 통해 is값 변환 (하단에 선언) //
             result = convertStr(is);
