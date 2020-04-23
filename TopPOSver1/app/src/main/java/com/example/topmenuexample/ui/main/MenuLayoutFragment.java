@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.topmenuexample.MainActivity;
-import com.example.topmenuexample.Order;
-import com.example.topmenuexample.OrderDetail;
+import com.example.topmenuexample.frame.Order;
+import com.example.topmenuexample.frame.OrderDetail;
 import com.example.topmenuexample.R;
 
 import java.util.ArrayList;

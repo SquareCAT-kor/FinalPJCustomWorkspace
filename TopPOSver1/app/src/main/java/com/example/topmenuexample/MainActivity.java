@@ -5,6 +5,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.topmenuexample.frame.Order;
+import com.example.topmenuexample.frame.OrderDetail;
+import com.example.topmenuexample.frame.Sales;
 import com.example.topmenuexample.ui.main.LoginDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -12,7 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.example.topmenuexample.ui.main.SectionsPagerAdapter;
+import com.example.topmenuexample.adapter.SectionsPagerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public String tempEndTime = "";
     public Sales tempSales = new Sales();
     public ArrayList<Sales> tempSalesList = new ArrayList<Sales>();
+    public int sortData = 0;
 
 
     @Override

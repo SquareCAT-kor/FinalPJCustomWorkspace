@@ -58,6 +58,7 @@
 
         <Button
 
+            android:id="@+id/button_closedaysell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -102,7 +103,8 @@
                     android:background="@drawable/edge_black"
                     android:gravity="center"
                     android:text="일자"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
 
                 <TextView
 
@@ -112,7 +114,8 @@
                     android:background="@drawable/edge_black"
                     android:gravity="center"
                     android:text="총 주문량"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
 
                 <TextView
 
@@ -122,7 +125,8 @@
                     android:background="@drawable/edge_black"
                     android:gravity="center"
                     android:text="총 매출"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
 
                 <TextView
 
@@ -132,7 +136,8 @@
                     android:background="@drawable/edge_black"
                     android:gravity="center"
                     android:text="관리자"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
             </TableRow>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -144,21 +149,5 @@
                 android:background="@drawable/edge_black" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/edge_black"
-                android:gravity="center"
-                android:textColor="@android:color/black"
-                android:textSize="24sp" />
-
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

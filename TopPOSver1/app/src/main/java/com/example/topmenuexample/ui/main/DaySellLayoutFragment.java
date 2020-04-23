@@ -1,10 +1,13 @@
 package com.example.topmenuexample.ui.main;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,9 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.topmenuexample.MainActivity;
 import com.example.topmenuexample.R;
-import com.example.topmenuexample.Sales;
+import com.example.topmenuexample.adapter.SellListAdapter;
+import com.example.topmenuexample.frame.Sales;
 
-import java.lang.reflect.Array;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class DaySellLayoutFragment extends Fragment {
@@ -25,6 +33,7 @@ public class DaySellLayoutFragment extends Fragment {
     private ArrayList<Sales> salesList = new ArrayList<Sales>();
     RecyclerView list_sellView;
     private SellListAdapter sellListAdapter;
+    Button button_closedaysell;
 
 
     @Override
@@ -35,9 +44,12 @@ public class DaySellLayoutFragment extends Fragment {
 
         Log.d("---", "daySellLayout isvisible ? :" + isVisibleToUser);
         if (isVisibleToUser) {
-            if(sales != null && salesList !=null) {
+            if (sales != null && salesList != null) {
                 sales = ((MainActivity) getActivity()).tempSales;
                 salesList = ((MainActivity) getActivity()).tempSalesList;
+
+                //getSalesData();
+
                 Log.d("---", "sales : " + sales.toString());
                 Log.d("---", "salesList : " + salesList.toString());
                 sellView(this.getView());
@@ -76,8 +88,50 @@ public class DaySellLayoutFragment extends Fragment {
         list_sellView = view.findViewById(R.id.list_sellView);
         LinearLayoutManager sllm = new LinearLayoutManager(getContext());
         list_sellView.setLayoutManager(sllm);
+
+
         sellListAdapter = new SellListAdapter(salesList);
         list_sellView.setAdapter(sellListAdapter);
+
+        button_closedaysell = view.findViewById(R.id.button_closedaysell);
+
+
+    }
+
+    public void getSalesData(){
+
+        getDataFromHttp task = new getDataFromHttp();
+    }
+
+
+
+    class getDataFromHttp extends AsyncTask<Void,Void,String>{
+
+        URL url;
+        JSONObject jo;
+        JSONArray ja;
+
+        public getDataFromHttp(){
+            try {
+                url = new URL("http://70.12.224.85/top/posgetdata.top");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        // background 에서 http 요청
+        @Override
+        protected String doInBackground(Void... voids) {
+            return null;
+        }
+
+
+        // 받아온 값 정제 //
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
 
     }
 

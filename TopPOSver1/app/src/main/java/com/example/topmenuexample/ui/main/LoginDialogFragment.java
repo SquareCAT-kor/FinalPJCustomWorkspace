@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.topmenuexample.MainActivity;
 import com.example.topmenuexample.R;
+import com.example.topmenuexample.network.HttpHandler;
 
 public class LoginDialogFragment extends DialogFragment implements View.OnClickListener {
 

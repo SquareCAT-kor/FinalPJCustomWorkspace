@@ -13,10 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.topmenuexample.MainActivity;
-import com.example.topmenuexample.OrderDetail;
+import com.example.topmenuexample.adapter.OrderListAdapter;
+import com.example.topmenuexample.frame.OrderDetail;
 import com.example.topmenuexample.R;
-import com.example.topmenuexample.Order;
-import com.example.topmenuexample.Sales;
+import com.example.topmenuexample.frame.Order;
+import com.example.topmenuexample.network.JSONHttpHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ public class OrderLayoutFragment extends Fragment {
     RecyclerView list_recyclerview;
     private ArrayList<OrderDetail> odlist = new ArrayList<OrderDetail>();
     private Order order = new Order();
-    private OrderListAdapter OrderListAdapter;
+    private com.example.topmenuexample.adapter.OrderListAdapter OrderListAdapter;
     TextView txt_orderCost, txt_orderCount, txt_orderDate, txt_orderNo;
     private JSONObject jo;
     private JSONArray ja;
@@ -53,10 +54,8 @@ public class OrderLayoutFragment extends Fragment {
             order = ((MainActivity) getActivity()).tempOrder;
             Log.d("---", "Get from menu" + "odlist: " + odlist + "Order" + order);
 
-            sendJsonOdlistData(odlist);
-
             sendJsonOrderData(order);
-
+            sendJsonOdlistData(odlist);
 
             makeList(this.getView());
 
@@ -105,7 +104,8 @@ public class OrderLayoutFragment extends Fragment {
             jo.put("orderCount", order.getTotalCount());
             jo.put("orderCost", order.getTotalCost());
             jo.put("orderNo", order.getOrderNo());
-           sendToHttpTask task = new sendToHttpTask(jo);
+            jo.put("chainID", "chainID_1000000");
+           sendToHttpTaskOrder task = new sendToHttpTaskOrder(jo);
             task.execute();
         } catch (Exception e) {
             Log.d("---", "error occured in sendOrderData");
@@ -118,9 +118,10 @@ public class OrderLayoutFragment extends Fragment {
         JSONObject odjo = new JSONObject();
         try{
             for(int i = 0;i<odlist.size();i++){
-                odjo.put("menu"+i+1,odlist.get(i));
+                odjo.put("menu"+(i+1),odlist.get(i));
             }
-            sendToHttpTask task = new sendToHttpTask(odjo);
+            odjo.put("chainID", "chainID_1000000");
+            sendToHttpTaskOdlist task = new sendToHttpTaskOdlist(odjo);
             task.execute();
         }catch(Exception e){
             Log.d("---", "error occured in sendOrderDetailListData");
@@ -129,15 +130,57 @@ public class OrderLayoutFragment extends Fragment {
 
     }
 
-    class sendToHttpTask extends AsyncTask<Void, Void, String> {
+    class sendToHttpTaskOrder extends AsyncTask<Void, Void, String> {
 
         URL url;
         JSONObject jo;
 
-        public sendToHttpTask(JSONObject jo) {
+        public sendToHttpTaskOrder(JSONObject jo) {
             try {
-                url = new URL("http://70.12.224.85/top/posorder.top");
                 this.jo = jo;
+                url = new URL("http://70.12.224.85/top/posorder.top");
+
+            } catch (MalformedURLException e) {
+                Log.d("---", "Error occured in urlconnection");
+                e.printStackTrace();
+            }
+        }
+
+
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            Log.d("---", "Background Processing");
+            return JSONHttpHandler.getString(url, jo);
+//            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result != null && result != "") {
+                Log.d("---", "getFrom Server" + result.trim());
+                if (result.trim().equals("success")) {
+                    Log.d("---", "Data Inserted");
+                } else {
+                    Log.d("---", "no msg came from Server");
+                }
+            }
+
+        }
+
+    }
+
+    class sendToHttpTaskOdlist extends AsyncTask<Void, Void, String> {
+
+        URL url;
+        JSONObject jo;
+
+        public sendToHttpTaskOdlist(JSONObject jo) {
+            try {
+                this.jo = jo;
+                url = new URL("http://70.12.224.85/top/posorderdetail.top");
+
             } catch (MalformedURLException e) {
                 Log.d("---", "Error occured in urlconnection");
                 e.printStackTrace();
@@ -172,6 +215,7 @@ public class OrderLayoutFragment extends Fragment {
 
 
 
+
     public void makeList(View view) {
         Log.d("---", "makeList");
 
@@ -192,7 +236,6 @@ public class OrderLayoutFragment extends Fragment {
         txt_orderDate.setText(order.getOrderDate() + "");
         txt_orderCount.setText(order.getTotalCount() + "");
         txt_orderCost.setText(order.getTotalCost() + "");
-
 
     }
 

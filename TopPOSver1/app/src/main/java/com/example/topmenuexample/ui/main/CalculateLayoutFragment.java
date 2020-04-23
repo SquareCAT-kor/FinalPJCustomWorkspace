@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.topmenuexample.MainActivity;
-import com.example.topmenuexample.Order;
+import com.example.topmenuexample.adapter.CalculateListAdapter;
+import com.example.topmenuexample.frame.Order;
 import com.example.topmenuexample.R;
-import com.example.topmenuexample.Sales;
+import com.example.topmenuexample.frame.Sales;
+import com.example.topmenuexample.network.JSONHttpHandler;
 
 import org.json.JSONArray;
 
@@ -38,7 +40,7 @@ public class CalculateLayoutFragment extends Fragment {
     private int page;
     private Order order = new Order();
     private ArrayList<Order> olist = new ArrayList<Order>();
-    private CalculateListAdapter CalculateListAdapter;
+    private com.example.topmenuexample.adapter.CalculateListAdapter CalculateListAdapter;
     private String startTime;
     private Sales sales = new Sales();
     private ArrayList<Sales> salesList = new ArrayList<Sales>();
@@ -193,6 +195,7 @@ public class CalculateLayoutFragment extends Fragment {
         public sendToHttpTask(JSONObject jo) {
             try {
                 url = new URL("http://70.12.224.85/top/pos.top");
+                //url = new URL("http://172.30.0.220/top/pos.top");
                 this.jo = jo;
             } catch (MalformedURLException e) {
                 Log.d("---", "Error occured in urlconnection");

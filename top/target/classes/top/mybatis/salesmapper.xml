@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  constructor
+	String salesID;
+	String salesRegDate;
+	int totSales;
+	String chainID;
+ -->
+
+<mapper namespace="top.mapper.SalesMapper">
+	<insert id = "insert" parameterType = "sales">
+		INSERT INTO SALES VALUES ('SALESID_'||TO_CHAR(SALESID_SEQ.NEXTVAL),
+		#{salesRegDate},#{totSales},#{chainID})
+	</insert>
+	
+	<update id="update" parameterType="sales">
+		UPDATE SALES SET SALESREGDATE = #{salesRegDate},TOTSALES = #{totSales}
+		WHERE SALESID = #{salesID}	
+	</update>
+	
+	<delete id = "delete" parameterType="String">
+		DELETE FROM SALES WHERE SALESID = #{salesID}
+	</delete> 	
+	
+	<select id="select" parameterType="String" resultType="sales">
+		SELECT * FROM SALES WHERE salesID=#{salesID}
+	</select>
+	<select id="selectall" resultType="sales">
+		SELECT * FROM SALES
+	</select>
+	
+	<select id="selectbychain" parameterType="String" resultType="sales">
+		SELECT * FROM (SELECT * FROM SALES WHERE chainID=#{chainID} ORDER BY SALESID DESC) WHERE ROWNUM = 1
+	</select>
+</mapper>
