@@ -18,7 +18,7 @@ import com.example.topmenuexample.adapter.CalculateListAdapter;
 import com.example.topmenuexample.frame.Order;
 import com.example.topmenuexample.R;
 import com.example.topmenuexample.frame.Sales;
-import com.example.topmenuexample.network.JSONHttpHandler;
+import com.example.topmenuexample.network.OrderHttpHandler;
 
 import org.json.JSONArray;
 
@@ -208,7 +208,7 @@ public class CalculateLayoutFragment extends Fragment {
         @Override
         protected String doInBackground(Void... voids) {
             Log.d("---", "Background Processing");
-            return JSONHttpHandler.getString(url, jo);
+            return OrderHttpHandler.getString(url, jo);
 //            return null;
         }
 

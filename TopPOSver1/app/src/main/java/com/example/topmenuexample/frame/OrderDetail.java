@@ -5,15 +5,18 @@ import java.io.Serializable;
 public class OrderDetail implements Serializable {
 
     int imgSrc;
+    String menuID;
     String menuName;
     int menuCost;
     int menuCount;
 
     public OrderDetail() {
+
     }
 
-    public OrderDetail(int imgSrc, String menuName, int menuCost, int menuCount) {
+    public OrderDetail(int imgSrc, String menuID, String menuName, int menuCost, int menuCount) {
         this.imgSrc = imgSrc;
+        this.menuID = menuID;
         this.menuName = menuName;
         this.menuCost = menuCost;
         this.menuCount = menuCount;
@@ -25,6 +28,14 @@ public class OrderDetail implements Serializable {
 
     public void setImgSrc(int imgSrc) {
         this.imgSrc = imgSrc;
+    }
+
+    public String getMenuID() {
+        return menuID;
+    }
+
+    public void setMenuID(String menuID) {
+        this.menuID = menuID;
     }
 
     public String getMenuName() {
@@ -54,10 +65,14 @@ public class OrderDetail implements Serializable {
     @Override
     public String toString() {
         return "OrderDetail{" +
-                "imgSrc='" + imgSrc + '\'' +
+                "imgSrc=" + imgSrc +
+                ", menuID='" + menuID + '\'' +
                 ", menuName='" + menuName + '\'' +
                 ", menuCost=" + menuCost +
                 ", menuCount=" + menuCount +
                 '}';
     }
 }
+
+
+

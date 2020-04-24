@@ -17,7 +17,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.topmenuexample.MainActivity;
 import com.example.topmenuexample.R;
-import com.example.topmenuexample.network.HttpHandler;
+import com.example.topmenuexample.network.LoginHttpHandler;
 
 public class LoginDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -83,7 +83,7 @@ public class LoginDialogFragment extends DialogFragment implements View.OnClickL
         @Override
         protected String doInBackground(Void... voids) {
             Log.d("---", "Background Processing");
-            return HttpHandler.getString(url);
+            return LoginHttpHandler.getString(url);
         }
 
 

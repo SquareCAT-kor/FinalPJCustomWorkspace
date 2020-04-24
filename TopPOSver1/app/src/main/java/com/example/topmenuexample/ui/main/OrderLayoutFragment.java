@@ -13,11 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.topmenuexample.MainActivity;
-import com.example.topmenuexample.adapter.OrderListAdapter;
-import com.example.topmenuexample.frame.OrderDetail;
 import com.example.topmenuexample.R;
+import com.example.topmenuexample.adapter.OrderListAdapter;
 import com.example.topmenuexample.frame.Order;
-import com.example.topmenuexample.network.JSONHttpHandler;
+import com.example.topmenuexample.frame.OrderDetail;
+import com.example.topmenuexample.network.OrderDetailHttpHandler;
+import com.example.topmenuexample.network.OrderHttpHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -115,13 +116,20 @@ public class OrderLayoutFragment extends Fragment {
 
     public void sendJsonOdlistData(ArrayList<OrderDetail> odlist){
         odlist = this.odlist;
-        JSONObject odjo = new JSONObject();
+
+        JSONArray odja = new JSONArray();
         try{
             for(int i = 0;i<odlist.size();i++){
-                odjo.put("menu"+(i+1),odlist.get(i));
+                JSONObject odjo = new JSONObject();
+                odjo.put("menuID",odlist.get(i).getMenuID());
+                odjo.put("menuName",odlist.get(i).getMenuName());
+                odjo.put("menuCost",odlist.get(i).getMenuCost());
+                odjo.put("menuCount",odlist.get(i).getMenuCount());
+                odjo.put("chainID", "chainID_1000000");
+                odja.put(odjo);
             }
-            odjo.put("chainID", "chainID_1000000");
-            sendToHttpTaskOdlist task = new sendToHttpTaskOdlist(odjo);
+            Log.d("---","orderDetailArray"+odja.toString());
+            sendToHttpTaskOdlist task = new sendToHttpTaskOdlist(odja);
             task.execute();
         }catch(Exception e){
             Log.d("---", "error occured in sendOrderDetailListData");
@@ -151,7 +159,7 @@ public class OrderLayoutFragment extends Fragment {
         @Override
         protected String doInBackground(Void... voids) {
             Log.d("---", "Background Processing");
-            return JSONHttpHandler.getString(url, jo);
+            return OrderHttpHandler.getString(url, jo);
 //            return null;
         }
 
@@ -174,11 +182,11 @@ public class OrderLayoutFragment extends Fragment {
     class sendToHttpTaskOdlist extends AsyncTask<Void, Void, String> {
 
         URL url;
-        JSONObject jo;
+        JSONArray odja;
 
-        public sendToHttpTaskOdlist(JSONObject jo) {
+        public sendToHttpTaskOdlist(JSONArray odja) {
             try {
-                this.jo = jo;
+                this.odja = odja;
                 url = new URL("http://70.12.224.85/top/posorderdetail.top");
 
             } catch (MalformedURLException e) {
@@ -191,9 +199,7 @@ public class OrderLayoutFragment extends Fragment {
 
         @Override
         protected String doInBackground(Void... voids) {
-            Log.d("---", "Background Processing");
-            return JSONHttpHandler.getString(url, jo);
-//            return null;
+            return OrderDetailHttpHandler.getString(url,odja);
         }
 
 

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,20 +16,31 @@ import com.example.topmenuexample.MainActivity;
 import com.example.topmenuexample.R;
 import com.example.topmenuexample.adapter.SellListAdapter;
 import com.example.topmenuexample.frame.Sales;
+import com.example.topmenuexample.frame.SalesVO;
+import com.example.topmenuexample.network.getDailySalesHttpHandler;
+import com.example.topmenuexample.network.getSalesHttpHandler;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+/*
+일일 판매량 나타내는 Fragment , DB 에서 판매량을 일별로 묶어서 가져온 후 한줄씩 표시할 수 있도록 수정해야한다.
+ */
+
 public class DaySellLayoutFragment extends Fragment {
 
     private String title;
     private int page;
     private Sales sales = new Sales();
+    private SalesVO sdb = new SalesVO();
     private ArrayList<Sales> salesList = new ArrayList<Sales>();
+    private ArrayList<SalesVO> sdbList = new ArrayList<SalesVO>();
+    private ArrayList<SalesVO> sdbList2 = new ArrayList<SalesVO>();
     RecyclerView list_sellView;
     private SellListAdapter sellListAdapter;
     Button button_closedaysell;
@@ -48,7 +58,8 @@ public class DaySellLayoutFragment extends Fragment {
                 sales = ((MainActivity) getActivity()).tempSales;
                 salesList = ((MainActivity) getActivity()).tempSalesList;
 
-                //getSalesData();
+               // getSalesData();
+                getDailySalesData();
 
                 Log.d("---", "sales : " + sales.toString());
                 Log.d("---", "salesList : " + salesList.toString());
@@ -90,7 +101,7 @@ public class DaySellLayoutFragment extends Fragment {
         list_sellView.setLayoutManager(sllm);
 
 
-        sellListAdapter = new SellListAdapter(salesList);
+        sellListAdapter = new SellListAdapter(sdbList2);
         list_sellView.setAdapter(sellListAdapter);
 
         button_closedaysell = view.findViewById(R.id.button_closedaysell);
@@ -98,20 +109,26 @@ public class DaySellLayoutFragment extends Fragment {
 
     }
 
-    public void getSalesData(){
+    public void getSalesData() {
 
         getDataFromHttp task = new getDataFromHttp();
+        task.execute();
+    }
+
+    public void getDailySalesData() {
+
+        getDailyDataFromHttp task = new getDailyDataFromHttp();
+        task.execute();
     }
 
 
-
-    class getDataFromHttp extends AsyncTask<Void,Void,String>{
+    class getDataFromHttp extends AsyncTask<Void, Void, String> {
 
         URL url;
         JSONObject jo;
         JSONArray ja;
 
-        public getDataFromHttp(){
+        public getDataFromHttp() {
             try {
                 url = new URL("http://70.12.224.85/top/posgetdata.top");
             } catch (MalformedURLException e) {
@@ -123,15 +140,80 @@ public class DaySellLayoutFragment extends Fragment {
         // background 에서 http 요청
         @Override
         protected String doInBackground(Void... voids) {
-            return null;
+            return getSalesHttpHandler.requestData(url);
         }
 
 
         // 받아온 값 정제 //
         @Override
         protected void onPostExecute(String result) {
+            try {
+                ja = new JSONArray(result);
+                sdbList = new ArrayList<SalesVO>();
+                for (int i = 0; i < ja.length(); i++) {
+                    jo = ja.getJSONObject(i);
+                    sdb = new SalesVO();
+                    sdb.setChainID(jo.getString("chainID"));
 
+                    sdb.setSalesID(jo.getString("salesID"));
+
+                    sdb.setSalesRegDate(jo.getString("salesRegDate"));
+                    sdb.setTotSales(Integer.parseInt(jo.getString("totSales")));
+                    sdbList.add(sdb);
+
+                }
+                String chainID = sdbList.get(0).getChainID();
+                ((MainActivity)getActivity()).tempchainID = chainID;
+                Log.d("---", "salesDBList" + sdbList.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+        class getDailyDataFromHttp extends AsyncTask<Void, Void, String> {
+
+            URL url;
+            JSONObject jo;
+            JSONArray ja;
+
+            public getDailyDataFromHttp() {
+                try {
+                    url = new URL("http://70.12.224.85/top/posgetdailydata.top");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            // background 에서 http 요청
+            @Override
+            protected String doInBackground(Void... voids) {
+                return getDailySalesHttpHandler.requestData(url);
+            }
+
+
+            // 받아온 값 정제 //
+            @Override
+            protected void onPostExecute(String result) {
+                try {
+                    ja = new JSONArray(result);
+                    sdbList2 = new ArrayList<SalesVO>();
+                    for(int i = 0; i<ja.length();i++){
+                        jo = ja.getJSONObject(i);
+                        sdb = new SalesVO();
+                        sdb.setDailySales(jo.getString("dailySales"));
+                        sdb.setRevenue(jo.getString("revenue"));
+
+
+                        sdbList2.add(sdb);
+                    }
+
+                    Log.d("---","salesDBList" + sdbList2.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
     }
 

@@ -9,30 +9,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.topmenuexample.R;
-import com.example.topmenuexample.frame.Sales;
+import com.example.topmenuexample.frame.SalesVO;
 
 import java.util.ArrayList;
 
 public class SellListAdapter extends RecyclerView.Adapter<SellListAdapter.sViewHolder> {
 
-    private final ArrayList<Sales> salesList;
+
+    private final ArrayList<SalesVO> sdbList2;
 
     public class sViewHolder extends RecyclerView.ViewHolder{
 
-        protected TextView txt_sellDate,txt_sellCount,txt_sellCost,txt_sellAdmin;
+        protected TextView txt_salesRegDate,txt_chainID,txt_totSales;
 
         public sViewHolder(View view){
             super(view);
-            this.txt_sellDate = view.findViewById(R.id.txt_sellDate);
-            this.txt_sellCount = view.findViewById(R.id.txt_sellCount);
-            this.txt_sellCost= view.findViewById(R.id.txt_sellCost);
-            this.txt_sellAdmin = view.findViewById(R.id.txt_sellAdmin);
+            this.txt_salesRegDate = view.findViewById(R.id.txt_salesRegDate);
+            this.txt_totSales = view.findViewById(R.id.txt_totSales);
+            this.txt_chainID = view.findViewById(R.id.txt_chainID);
         }
     }
 
-    public SellListAdapter(ArrayList<Sales> salesList){
+    public SellListAdapter(ArrayList<SalesVO> sdbList2){
 
-        this.salesList = salesList;
+        this.sdbList2 = sdbList2;
+
 
     }
 
@@ -48,16 +49,15 @@ public class SellListAdapter extends RecyclerView.Adapter<SellListAdapter.sViewH
     @Override
     public void onBindViewHolder(@NonNull sViewHolder viewHolder, int position) {
 
-        viewHolder.txt_sellAdmin.setText(salesList.get(position).getAdmin());
-        viewHolder.txt_sellCost.setText(salesList.get(position).getSellCost()+"");
-        viewHolder.txt_sellCount.setText(salesList.get(position).getSellCount()+"");
-        viewHolder.txt_sellDate.setText(salesList.get(position).getSellDate());
+        viewHolder.txt_totSales.setText(sdbList2.get(position).getRevenue()+"");
+        viewHolder.txt_salesRegDate.setText(sdbList2.get(position).getDailySales()+"");
+        viewHolder.txt_chainID.setText("chainID_1000000");
 
     }
 
     @Override
     public int getItemCount() {
-        return (null != salesList ? salesList.size() : 0);
+        return (null != sdbList2 ? sdbList2.size() : 0);
     }
 
 

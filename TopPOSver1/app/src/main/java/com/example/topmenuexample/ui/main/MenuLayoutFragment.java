@@ -361,11 +361,17 @@ public class MenuLayoutFragment extends Fragment {
                 od6.setImgSrc(R.drawable.m6);
 
                 od1.setMenuName(menu1_name.getText().toString());
+                od1.setMenuID("menuID_1000000");
                 od2.setMenuName(menu2_name.getText().toString());
+                od2.setMenuID("menuID_1000001");
                 od3.setMenuName(menu3_name.getText().toString());
+                od3.setMenuID("menuID_1000002");
                 od4.setMenuName(menu4_name.getText().toString());
+                od4.setMenuID("menuID_1000003");
                 od5.setMenuName(menu5_name.getText().toString());
+                od5.setMenuID("menuID_1000004");
                 od6.setMenuName(menu6_name.getText().toString());
+                od6.setMenuID("menuID_1000005");
 
                 od1.setMenuCount(m1);
                 od2.setMenuCount(m2);
