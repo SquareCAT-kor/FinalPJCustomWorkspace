@@ -4,9 +4,9 @@
 #define LOADCELL_DOUT_PIN         2
 #define LOADCELL_SCK_PIN          3
 
-// scale - 10Kg loadcell : 226 / 5kg loadcell : 372
+// scale - 10Kg loadcell : 226 / 5kg loadcell : 372 // 10kg 두개 연결시 ?
 // ADC 모듈에서 측정된 결과값을 (loadcellValue)값 당 1g으로 변환해 줌
-float loadcellValue = 226.0;
+float loadcellValue = 113.0; 
 
 HX711 scale;
 
@@ -22,8 +22,8 @@ void setup() {
   delay(2000);
 
   // 측정값 1회 읽어오기
-  //Serial.print("read: \t\t\t");
-  //Serial.println(scale.read());
+  Serial.print("read: \t\t\t");
+  Serial.println(scale.read());
 
   delay(1000);
 
@@ -34,14 +34,14 @@ void setup() {
   scale.tare(10);    
 
   // 설정된 오프셋 및 스케일 값 확인
- // Serial.print("Offset value :\t\t");
-  //Serial.println(scale.get_offset());
- // Serial.print("Scale value :\t\t");
- // Serial.println(scale.get_scale());
+  Serial.print("Offset value :\t\t");
+  Serial.println(scale.get_offset());
+  Serial.print("Scale value :\t\t");
+  Serial.println(scale.get_scale());
 
   // (read - offset) 값 확인 (scale 미적용)
-//  Serial.print("(read - offset) value: \t");  
- // Serial.println(scale.get_value());
+   Serial.print("(read - offset) value: \t");  
+   Serial.println(scale.get_value());
   delay(2000);
 
 }
