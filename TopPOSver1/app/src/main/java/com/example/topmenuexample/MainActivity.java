@@ -24,6 +24,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
 
+    public static String IP = "192.168.0.111"; // 자신의 서버 주소를 여기에 입력
     public Order tempOrder = new Order();
     public ArrayList<OrderDetail> tempOdlist = new ArrayList<OrderDetail>();
     int tempPosition = 0;

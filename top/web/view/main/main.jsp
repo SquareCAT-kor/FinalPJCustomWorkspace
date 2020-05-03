@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
@@ -30,17 +33,46 @@
 	});
 </script>
 
-<!-- Fonts and icons -->
-	<script src="assets/js/plugin/webfont/webfont.min.js"></script>
-	<script>
-		WebFont.load({
-			google: {"families":["Open+Sans:300,400,600,700"]},
-			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands"], urls: ['assets/css/fonts.css']},
-			active: function() {
-				sessionStorage.fonts = true;
+<script>
+	var popupCheck = 5;
+	var targetObj = {};
+	var targetProxy = new Proxy(targetObj, {
+		set : function(target, key, value) {
+			//console.log(`${key} set to ${value}`);
+			location.href = "/sendToContainer.top";
+			target[key] = value;
+			return true;
+		}
+	});
+	//targetProxy.hello_world = "test";
+	function getData(value) {
+		$.ajax({
+			url : '/orderData.top',
+			success : function(data) {
+				//여기서 데이터를 받아온다
+				itemList = data;
+				if (value == 1) {
+					return data;
+				}
 			}
 		});
-	</script>
+	};
+	// 자식으로부터 메시지 수신
+	function receiveMsgFromChild(e) {
+		console.log('자식으로부터 받은 메시지 ' + e.data + " printed");
+	}
+
+	function popup() {
+		var myId = "${loginId}";
+		var url = "popupOrder.top?id=";//../top/view/main/popupOrder.jsp 
+		//popupOrder.top 하면 매핑이 된다. 
+		url = url + myId;
+		var name = "popup test";
+		var option = "width = 700, height =1200, top = 100, left = 200, location = no";
+		window.open(url, name, option);
+	}
+</script>
+
 
 <!-- CSS Files -->
 <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -65,50 +97,23 @@
 				<div class="main-panel">
 					<div class="content">
 						<div class="page-inner">
-							<!-- Real Time Inventory START! -->
-							<c:choose>
-								<c:when test="${inventory_realtime == null }">
-									<jsp:include page="empty.jsp" />
-								</c:when>
-								<c:otherwise>
-									<jsp:include page="${inventory_realtime }.jsp" />
-								</c:otherwise>
-							</c:choose>
-							<!-- Real Time Inventory END! -->
-
-
-							<!-- Ingredient List START! -->
-							<c:choose>
-								<c:when test="${ingredientListTable == null }">
-									<jsp:include page="empty.jsp" />
-								</c:when>
-								<c:otherwise>
-									<jsp:include page="${ingredientListTable }.jsp" />
-								</c:otherwise>
-							</c:choose>
-							<!-- Ingredient List END! -->
-
-							<!-- Product Suggestion START! -->
-							<c:choose>
-								<c:when test="${suggestion == null }">
-									<jsp:include page="empty.jsp" />
-								</c:when>
-								<c:otherwise>
-									<jsp:include page="${suggestion }.jsp" />
-								</c:otherwise>
-							</c:choose>
-							<!-- Product Suggestion END! -->
-
 							<!-- Visual Analysis START! -->
 							<c:choose>
-								<c:when test="${analysis == null }">
-									<jsp:include page="empty.jsp" />
+								<c:when test="${AllChainsVisualAnalysis != null }">
+									<jsp:include page="${AllChainsVisualAnalysis }.jsp" />
 								</c:when>
-								<c:otherwise>
-									<jsp:include page="${analysis }.jsp" />
-								</c:otherwise>
 							</c:choose>
 							<!-- Visual Analysis END! -->
+
+							<c:choose>
+								<c:when test="${center != null }">
+									<jsp:include page="${center }.jsp" />
+
+								</c:when>
+
+							</c:choose>
+
+
 						</div>
 					</div>
 				</div>
@@ -116,6 +121,7 @@
 		</c:choose>
 	</div>
 </body>
+
 
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.3.2.1.min.js"></script>

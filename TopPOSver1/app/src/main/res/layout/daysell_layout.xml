@@ -25,6 +25,7 @@
 
         <TextView
 
+            android:id="@+id/txt_startday"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -47,6 +48,7 @@
 
         <TextView
 
+            android:id="@+id/txt_lastday"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

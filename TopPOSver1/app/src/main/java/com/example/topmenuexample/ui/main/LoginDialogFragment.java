@@ -75,7 +75,7 @@ public class LoginDialogFragment extends DialogFragment implements View.OnClickL
         String url;
 
         public HttpTask(String id, String pwd) {
-            url = "http://52.78.108.32:8080/webview/login.jsp?";
+            url = "http://" + MainActivity.IP + "/top/loginChainTablet.top?";
             url += "id=" + id + "&pwd=" + pwd;
 
         }

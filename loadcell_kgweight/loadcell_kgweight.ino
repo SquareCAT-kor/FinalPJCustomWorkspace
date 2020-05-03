@@ -6,7 +6,7 @@
 
 // scale - 10Kg loadcell : 226 / 5kg loadcell : 372
 // ADC 모듈에서 측정된 결과값을 (loadcellValue)값 당 1g으로 변환해 줌
-float loadcellValue = 226.0;
+float loadcellValue = 46.5;
 
 HX711 scale;
 

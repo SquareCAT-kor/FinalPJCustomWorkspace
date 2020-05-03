@@ -149,10 +149,10 @@ public class CalculateLayoutFragment extends Fragment {
 
                 ((MainActivity) getActivity()).tempSales = sales;
                 ((MainActivity) getActivity()).tempSalesList.add(sales);
-                ((MainActivity) getActivity()).setPageNum(3);
-                ((MainActivity) getActivity()).viewPager.setCurrentItem(3);
+            //    ((MainActivity) getActivity()).setPageNum(3);
+             //   ((MainActivity) getActivity()).viewPager.setCurrentItem(3);
 
-                sendJsonData(sales);
+                //sendJsonData(sales);
 
             }
         });
@@ -194,8 +194,8 @@ public class CalculateLayoutFragment extends Fragment {
 
         public sendToHttpTask(JSONObject jo) {
             try {
-                url = new URL("http://70.12.224.85/top/pos.top");
-                //url = new URL("http://172.30.0.220/top/pos.top");
+
+                url = new URL("http://"+MainActivity.IP+"/top/pos.top");
                 this.jo = jo;
             } catch (MalformedURLException e) {
                 Log.d("---", "Error occured in urlconnection");

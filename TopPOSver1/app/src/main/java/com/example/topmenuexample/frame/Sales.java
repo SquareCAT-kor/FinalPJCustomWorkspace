@@ -1,6 +1,8 @@
 package com.example.topmenuexample.frame;
 
-public class Sales {
+import java.io.Serializable;
+
+public class Sales implements Serializable {
 
 
     String sellDate;

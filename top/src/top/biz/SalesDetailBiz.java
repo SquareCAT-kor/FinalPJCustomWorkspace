@@ -27,7 +27,7 @@ public class SalesDetailBiz implements Biz<String, SalesDetailVO> {
 	}
 
 	@Override
-	public void register(SalesDetailVO model) throws Exception {
+	public void register(SalesDetailVO model){
 		dao.insert(model);
 		
 	}

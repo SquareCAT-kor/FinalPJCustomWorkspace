@@ -25,7 +25,7 @@ public class SalesDetailDao implements Dao<String, SalesDetailVO> {
 	}
 
 	@Override
-	public void insert(SalesDetailVO model) throws Exception {
+	public void insert(SalesDetailVO model){
 		salesdetailmapper.insert(model);
 
 		

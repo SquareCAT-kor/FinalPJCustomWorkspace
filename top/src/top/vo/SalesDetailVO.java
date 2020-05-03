@@ -5,6 +5,7 @@ public class SalesDetailVO {
 	String salesDetailID;
 	String salesDetailRegDate;
 	String salesID;
+	String menuID;
 	String menuName;
 	String menuPrice;
 	String menuCount;
@@ -14,22 +15,16 @@ public class SalesDetailVO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SalesDetailVO(String salesDetailID, String salesDetailRegDate, String salesID, String menuName,
-			String menuPrice, String menuCount) {
+	public SalesDetailVO(String salesDetailID, String salesDetailRegDate, String salesID, String menuID,
+			String menuName, String menuPrice, String menuCount) {
 		super();
 		this.salesDetailID = salesDetailID;
 		this.salesDetailRegDate = salesDetailRegDate;
 		this.salesID = salesID;
+		this.menuID = menuID;
 		this.menuName = menuName;
 		this.menuPrice = menuPrice;
 		this.menuCount = menuCount;
-	}
-
-	@Override
-	public String toString() {
-		return "SalesDetailVO [salesDetailID=" + salesDetailID + ", salesDetailRegDate=" + salesDetailRegDate
-				+ ", salesID=" + salesID + ", menuName=" + menuName + ", menuPrice=" + menuPrice + ", menuCount="
-				+ menuCount + "]";
 	}
 
 	public String getSalesDetailID() {
@@ -56,6 +51,14 @@ public class SalesDetailVO {
 		this.salesID = salesID;
 	}
 
+	public String getMenuID() {
+		return menuID;
+	}
+
+	public void setMenuID(String menuID) {
+		this.menuID = menuID;
+	}
+
 	public String getMenuName() {
 		return menuName;
 	}
@@ -80,5 +83,13 @@ public class SalesDetailVO {
 		this.menuCount = menuCount;
 	}
 
+	@Override
+	public String toString() {
+		return "SalesDetailVO [salesDetailID=" + salesDetailID + ", salesDetailRegDate=" + salesDetailRegDate
+				+ ", salesID=" + salesID + ", menuID=" + menuID + ", menuName=" + menuName + ", menuPrice=" + menuPrice
+				+ ", menuCount=" + menuCount + "]";
+	}
+	
+	
 	
 }

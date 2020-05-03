@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +45,8 @@ public class DaySellLayoutFragment extends Fragment {
     RecyclerView list_sellView;
     private SellListAdapter sellListAdapter;
     Button button_closedaysell;
+    TextView txt_startday,txt_lastday;
+    String startDay,lastDay;
 
 
     @Override
@@ -105,6 +108,16 @@ public class DaySellLayoutFragment extends Fragment {
         list_sellView.setAdapter(sellListAdapter);
 
         button_closedaysell = view.findViewById(R.id.button_closedaysell);
+        button_closedaysell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).setPageNum(0);
+                ((MainActivity) getActivity()).viewPager.setCurrentItem(0);
+            }
+        });
+
+        txt_lastday = view.findViewById(R.id.txt_lastday);
+        txt_startday = view.findViewById(R.id.txt_startday);
 
 
     }
@@ -130,7 +143,8 @@ public class DaySellLayoutFragment extends Fragment {
 
         public getDataFromHttp() {
             try {
-                url = new URL("http://70.12.224.85/top/posgetdata.top");
+                url = new URL("http://" + MainActivity.IP + "/top/pos.top");
+                this.jo = jo;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -162,6 +176,7 @@ public class DaySellLayoutFragment extends Fragment {
                     sdbList.add(sdb);
 
                 }
+                // 사실 ChainID는 태블릿마다 지정되기때문에, DB에서 굳이 안받아와도 된다. //
                 String chainID = sdbList.get(0).getChainID();
                 ((MainActivity)getActivity()).tempchainID = chainID;
                 Log.d("---", "salesDBList" + sdbList.toString());
@@ -179,7 +194,7 @@ public class DaySellLayoutFragment extends Fragment {
 
             public getDailyDataFromHttp() {
                 try {
-                    url = new URL("http://70.12.224.85/top/posgetdailydata.top");
+                    url = new URL("http://" + MainActivity.IP + "/top/posgetdailydata.top");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -199,6 +214,7 @@ public class DaySellLayoutFragment extends Fragment {
                 try {
                     ja = new JSONArray(result);
                     sdbList2 = new ArrayList<SalesVO>();
+                    if(ja.length() != 0 ){
                     for(int i = 0; i<ja.length();i++){
                         jo = ja.getJSONObject(i);
                         sdb = new SalesVO();
@@ -208,8 +224,12 @@ public class DaySellLayoutFragment extends Fragment {
 
                         sdbList2.add(sdb);
                     }
-
-                    Log.d("---","salesDBList" + sdbList2.toString());
+                    lastDay = sdbList2.get(0).getDailySales();
+                    startDay = sdbList2.get(sdbList2.size()-1).getDailySales();
+                    txt_lastday.setText(lastDay);
+                    txt_startday.setText(startDay);
+                    Log.d("---", "lastDay : " + lastDay + " startDay" + startDay);
+                    Log.d("---","salesDBList" + sdbList2.toString());}
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

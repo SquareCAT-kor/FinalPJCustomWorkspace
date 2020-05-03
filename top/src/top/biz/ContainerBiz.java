@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import top.frame.Biz;
 import top.frame.Dao;
@@ -26,10 +27,19 @@ public class ContainerBiz implements Biz<String, ContainerVO> {
 		return dao.selectall();
 	}
 
+	public ArrayList<ContainerVO> getForChain(String chainID) {
+		return dao.selectForChain(chainID);
+	}
+
+	public ArrayList<ContainerVO> getbyhq(String hqID) {
+		return dao.selectbyhq(hqID);
+	}
+
 	@Override
-	public void register(ContainerVO model) throws Exception {
+	@Transactional
+	public void register(ContainerVO model) {
 		dao.insert(model);
-		
+
 	}
 
 	@Override
@@ -40,7 +50,12 @@ public class ContainerBiz implements Biz<String, ContainerVO> {
 	@Override
 	public void remove(String conID) throws Exception {
 		dao.delete(conID);
-		
+
+	}
+
+	@Override
+	public ContainerVO getjustregistered(ContainerVO container) {
+		return dao.selectjustregistered(container);
 	}
 
 }
